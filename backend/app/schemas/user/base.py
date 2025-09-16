@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 class Base(BaseModel):
-    name: str
+    name: str | None = None
     
