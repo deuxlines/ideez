@@ -2,13 +2,15 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_name: str = ""
+    app_name: str = "FastAPI"
     debug: bool = True
 
-    database_url: str = "sqlite:///.db"
-    database_url_alembic: str = "sqlite:///.db"
+    database_url: str = ""
+    database_url_alembic: str = ""
     database_echo: bool = False
     secret_key: str = ""
+    client_secret: str = ""
+    client_id: str = ""
     
     class Config:
         env_file = ".env"
