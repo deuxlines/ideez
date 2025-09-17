@@ -2,7 +2,6 @@ from typing import Any
 
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware
 
 from app.core import settings
 
@@ -13,7 +12,7 @@ def create_app(
         **kwargs: Any,
 ) -> FastAPI:
     app: FastAPI = FastAPI(**kwargs)
-
+    
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
@@ -22,7 +21,10 @@ def create_app(
         allow_headers=["*"],
     )
 
-    app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
+    if use_sessions:
+        from starlette.middleware.sessions import SessionMiddleware
+
+        app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 
     for router in routers:
         app.include_router(router)
