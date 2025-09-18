@@ -5,7 +5,6 @@ from pydantic import BaseModel
 
 class VideoBase(BaseModel):
     video_id: str
-    user_id: UUID
 
 
 class VideoCreate(VideoBase):
@@ -14,6 +13,6 @@ class VideoCreate(VideoBase):
 
 class VideoRead(VideoBase):
     id: UUID
-
+    
     class Config:
         from_attributes = True
