@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     secret_key: str = ""
     client_secret: str = ""
     client_id: str = ""
+    frontend_url: str = ""
     
     class Config:
         env_file = ".env"
