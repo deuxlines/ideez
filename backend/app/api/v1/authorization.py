@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from authlib.integrations.starlette_client import OAuth
 
 from app.core import settings
-from app.utils import create_access_token
+from app.auth import create_access_token
 from app.database import get_db
 from app.domain import User
 from app.crud import create_user, get_user

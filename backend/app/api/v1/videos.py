@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.schemas import VideoRead, VideoCreate
 from app.domain import Video
 from app.database import get_db
-from app.utils import get_current_user_id
+from app.auth import get_current_user_id
 from app.crud import get_random_video, create_video, get_all_videos as all_videos
 
 video_router: APIRouter = APIRouter(prefix="/videos", tags=["Share your favorite youtube videos"])
