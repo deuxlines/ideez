@@ -18,7 +18,7 @@ auth_scheme = HTTPBearer()
 async def get_video(db: Session = Depends(get_db)) -> VideoRead | dict:
     video: Video | None = get_random_video(db)
     if not video:
-        return {"message": "No vidoes found"}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No videos found")
     return video
 
 @video_router.post("/", response_model=VideoRead)
