@@ -1,3 +1,4 @@
-from .auth_utils import get_user, create_user, create_access_token
+from .auth_utils import create_access_token, get_current_user_id
 
-__all__ = ["create_user", "get_user", "create_access_token",]
+
+__all__ = ["create_access_token", "get_current_user_id",]
