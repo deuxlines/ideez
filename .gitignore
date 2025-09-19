@@ -12,3 +12,6 @@ venv/
 
 # ENV
 .env
+.env.*
+
+!.end.example
