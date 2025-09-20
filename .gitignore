@@ -30,9 +30,6 @@ __pycache__/
 .venv/
 venv/
 
-# IDE
-.vscode/
-
 # ENV
 .env
 .env.*
