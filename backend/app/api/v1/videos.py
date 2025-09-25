@@ -1,18 +1,15 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.schemas import VideoRead, VideoCreate
 from app.domain import Video
 from app.database import get_db
-from app.auth import get_current_user_id
+from app.auth import get_current_user_id, auth_scheme
 from app.crud import get_random_video, create_video, get_all_videos as all_videos
 
 video_router: APIRouter = APIRouter(prefix="/videos", tags=["Share your favorite youtube videos"])
-
-auth_scheme = HTTPBearer()
 
 @video_router.get("/", response_model=VideoRead)
 async def get_video(db: Session = Depends(get_db)) -> VideoRead | dict:
