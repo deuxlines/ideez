@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware
 
 from app import settings
 
@@ -14,5 +13,3 @@ def setup_middleware(app: FastAPI) -> None:
             allow_methods = ["GET", "POST", "PUT", "DELETE"],
             allow_headers = ["Authorization", "Content-Type"]
         )
-
-    app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
