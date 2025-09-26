@@ -23,7 +23,6 @@ export default function AccountPage() {
 
     try {
       const videos = await apiService.fetchAllVideos();
-      console.log(videos);
       setCurrentVideos(videos);
     } catch(error: any) {
       setError(error.message || 'Failed to fetch video');
