@@ -19,7 +19,9 @@
 }
 
 .infocard {
+  border-radius: 28px;
   background-color: #DEFEF7;
+  color: #22194E;
 }
 
 @keyframes logo-spin {
@@ -43,6 +45,7 @@
   }
   .infocard {
     background-color: #22194E;
+    color: #DEFEF7;
   }
 }
 
@@ -66,4 +69,12 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.link {
+  will-change: filter;
+  transition: filter 200ms;
+}
+
+.link:hover {
+  filter: drop-shadow(0 0 1em #646cffaa);
+}
  

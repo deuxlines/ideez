@@ -1,33 +1,33 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import './App.css'
-import Card from './components/Card'
+import { useState, useEffect } from "react";
+import { apiService } from "../lib/api";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Login from "./pages/Login"
+import Logout from "./pages/Logout";
+import AccountPage from "./pages/AccountPage";
+
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(() => apiService.isAuthenticated());
+  const location = useLocation();
+
+  useEffect(() => {
+    setLoggedIn(apiService.isAuthenticated());
+  }, [location]);
+  
   return (
     <>
-      <Navbar />
+      <Navbar loggedIn={loggedIn} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/" element={loggedIn ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/about" element={loggedIn ? <About /> : <Navigate to="/login" />} />
+        <Route path="/login" element={<Login />}/>
+        <Route path="/logout" element={<Logout />}/>
+        <Route path="/account" element={loggedIn ? <AccountPage /> : <Navigate to="/login"/>} />
       </Routes>
-      
-      {/* <div className="mt-16 flex flex-col space-y-8">
-        <div className="flex flex-row space-x-8">
-          <Card><div></div></Card>
-          <Card><div></div></Card>
-        </div>
-        <div className="flex flex-row space-x-8">
-          <Card><div></div></Card>
-          <Card><div></div></Card>
-        </div>
-        <div className="flex flex-row space-x-8">
-          <Card><div></div></Card>
-          <Card><div></div></Card>
-        </div>
-      </div> */}
     </>
   )
 }
