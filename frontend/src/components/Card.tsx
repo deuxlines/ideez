@@ -1,12 +1,13 @@
 import type { ReactNode } from "react";
 
 interface CardProps {
-  children: ReactNode;
+  children: React.ReactNode;
+  className?: string;
 }
 
-export default function Card({ children }: CardProps) {
+export default function Card({ children, className }: CardProps) {
     return (
-        <div className="infocard shadow-2xl rounded-xl p-8 max-w-248 w-full mb-4 min-h-80 min-w-80 opacity-75">
+        <div className={`infocard shadow-2xl p-8 w-full mb-4 h-125 min-w-150 opacity-75 flex flex-col ${className || ""}`}>
             {children}
         </div>
     )
