@@ -37,3 +37,4 @@ def get_current_user_id(credentials: HTTPAuthorizationCredentials = Depends(auth
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",
         )
+    
