@@ -8,7 +8,7 @@ from app.core import settings
 from app.auth import create_access_token
 from app.database import get_db
 from app.domain import User
-from app.crud import create_user, get_user
+from app.crud import create_user, get_user_by_google_id
 
 auth_router: APIRouter = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -19,14 +19,12 @@ async def google_auth(data: GoogleToken, db: Session = Depends(get_db)):
             data.token, google_requests.Request(),
             settings.client_id
         )
-        # print(idinfo)
-        user: User | None = get_user(db, idinfo["sub"])
+        user: User | None = get_user_by_google_id(db, idinfo["sub"])
         if not user:
             user = create_user(
                 db=db,
                 user_info=idinfo
             )
-        return {"access_token": create_access_token(data={"sub": str(user.id)}), "user": {"email": idinfo["email"], "name": idinfo.get("name"), "picture": idinfo["picture"]}}
+        return {"access_token": create_access_token(data={"sub": str(user.id)}), "user": {"email": user.email, "name": user.name, "picture": user.picture_url}}
     except ValueError as e:
-        # print(e)
         raise HTTPException(status_code=400, detail="Invalid Google token")
