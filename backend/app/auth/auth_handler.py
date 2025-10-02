@@ -2,8 +2,8 @@
 from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi import HTTPException, status, Depends
+from fastapi.security import HTTPBearer
+from fastapi import HTTPException, status, Cookie
 from jose import jwt, JWTError
 
 from app.core import settings
@@ -21,10 +21,15 @@ def create_access_token(data: dict) -> str:
     token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return token
 
-def get_current_user_id(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)) -> UUID:
+def get_current_user_id(access_token: str | None = Cookie(None)) -> UUID:
     try:
-        token = credentials.credentials
-        payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
+        if not access_token:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated"
+            )
+
+        payload = jwt.decode(access_token, SECRET_KEY, algorithms=ALGORITHM)
         user_id = UUID(payload.get("sub"))
         if user_id:
             return user_id
@@ -37,4 +42,3 @@ def get_current_user_id(credentials: HTTPAuthorizationCredentials = Depends(auth
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",
         )
-    

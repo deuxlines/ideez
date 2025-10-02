@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     client_secret: str = ""
     client_id: str = ""
     frontend_url: str = ""
+    env_mode: str = "development"
     
     class Config:
         env_file = ".env"

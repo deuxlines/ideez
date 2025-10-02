@@ -11,81 +11,94 @@ export type VideoCreate = {
   video_id: string;
 };
 
-class ApiService {
-  private getAuthHeaders() {
-    const token = localStorage.getItem('access_token');
-    return {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` })
-    };
-  }
+export interface User {
+  email: string;
+  name: string;
+  picture: string;
+}
 
+class ApiService {
   async handleGoogleCredentialResponse(response: any): Promise<void> {
     try {
-        const idToken = response.credential;
-        const res = await fetch(`${API_BASE_URL}/auth/google`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token: idToken }),
-        });
-
-        if (!res.ok) {
-            throw new Error("Failed to authenticate with backend");
-        }
-        const data = await res.json();
-        if (data.access_token) {
-            localStorage.setItem("access_token", data.access_token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-            window.location.href = "/";
-        } else {
-            throw new Error("No access token returned from backend");
-        }
+      const idToken = response.credential;
+      const res = await fetch(`${API_BASE_URL}/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: idToken }),
+        credentials: "include",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to authenticate with backend");
+      }
+      const data = await res.json();
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        window.location.href = "/";
+      } else {
+        throw new Error("Failed to sign in");
+      }
     } catch (error) {
-        console.error("Google login error:", error);
+      console.error("Google login error:", error);
     }
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem("access_token");
-    if (!token) return false;
-
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    const now = Math.floor(Date.now() / 1000);
-
-    return payload.exp > now;
+    const user = localStorage.getItem("user");
+    return !!user;
 }
 
-  logout(): void {
-    if (localStorage.getItem('access_token')) {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user');
-    }
+  async logout(): Promise<void> {
+    await fetch(`${API_BASE_URL}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    localStorage.removeItem('user');
   }
 
   async fetchRandomVideo(): Promise<VideoType | null> {
-    const token = localStorage.getItem("access_token");
-    if (!token) return null;
-
-    const res = await fetch("http://127.0.0.1:8000/videos/", {
-      headers: this.getAuthHeaders(),
+    const res = await fetch(`${API_BASE_URL}/videos/`, {
+      credentials: "include",
     });
-
     if (!res.ok) throw new Error("Failed to fetch video");
     const data: VideoType = await res.json();
     return data;
   }
 
   async fetchAllVideos(): Promise<VideoType[] | null> {
-    const token = localStorage.getItem("access_token");
-    if (!token) return null;
-
-    const res = await fetch("http://127.0.0.1:8000/videos/all/", {
-      headers: this.getAuthHeaders(),
+    const res = await fetch(`${API_BASE_URL}/videos/all/`, {
+      credentials: "include",
     });
-
     if (!res.ok) throw new Error("Failed to fetch video");
     const data: VideoType[] = await res.json();
     return data;
+  }
+
+  async me(): Promise<User> {
+    const res = await fetch(`${API_BASE_URL}/me/`,{
+      method: "GET",
+      credentials: "include",
+    })
+  
+    if (!res.ok) {
+      throw new Error(`Failed to fetch current user: ${ await res.text() }`);
+    }
+
+    const data = await res.json();
+    if (!data.user) {
+      throw new Error("No user data");
+    }
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    return data.user;
+  }
+
+  async changeName() {
+    try {
+      const user = await this.me();
+      // do something with the user, e.g., update UI
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 
