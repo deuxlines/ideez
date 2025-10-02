@@ -20,8 +20,10 @@
 
 .infocard {
   border-radius: 28px;
-  background-color: #DEFEF7;
   color: #22194E;
+  background-color: rgba(222, 254, 247, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 @keyframes logo-spin {
@@ -44,7 +46,9 @@
     filter: drop-shadow(0 0 2em #22194E);
   }
   .infocard {
-    background-color: #22194E;
+    background-color: rgba(34, 25, 78, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: #DEFEF7;
   }
 }

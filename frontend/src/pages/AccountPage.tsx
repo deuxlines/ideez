@@ -24,9 +24,11 @@ export default function AccountPage() {
     try {
       const videos = await apiService.fetchAllVideos();
       setCurrentVideos(videos);
+      setLoading(false);
     } catch(error: any) {
       setError(error.message || 'Failed to fetch video');
       setCurrentVideos(null);
+      setLoading(false);
     }
   }
 
@@ -36,28 +38,26 @@ export default function AccountPage() {
   }, []);
 
   return (
-    <div className="flex flex-row gap-7.5 h-full w-full">
-      
-      <Card className="relative flex flex-col gap-7.5">
-        <h1 className="font-bold mb-2 self-start">Your videos:</h1>
-        
-        <div className="overflow-y-auto max-h-[100%] rounded-[15px]">
-          {currentVideos && currentVideos.length > 0 ? (
+    <div className="flex flex-row gap-10">
+      <Card className="flex-[3]">
+        <h1 className="font-bold text-xl self-start">Your videos:</h1>       
+        <div className="overflow-y-auto max-h-[80%] rounded-[35px]">
+          {loading && <h1 className="font-bold self-start">Loading...</h1>}
+          {error && <h1 className="font-bold self-start">{error}</h1>}
+          {currentVideos && currentVideos.length > 0 && (
             currentVideos
               .slice()
               .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
               .map(video => (
-                <Video key={video.video_id} video_id={video.video_id} />
+                <div>
+                  <Video key={video.video_id} video_id={video.video_id} />
+                </div>
               ))
-          ) : (
-            <h1 className="font-bold mb-16 self-start">No videos today ;(</h1>
           )}
         </div>
       </Card>
-      
-      
-      <Card>
-        <h1 className="font-bold mb-4 self-start">Something else here</h1>
+      <Card className="flex-[2]">
+        <h1 className="font-bold text-xl self-start">Something else here</h1>
         {userMail && <p className="font-bold self-start">Email: {userMail}</p>}
         {userName && <p className="font-bold self-start">Username: {userName}</p>}
       </Card>

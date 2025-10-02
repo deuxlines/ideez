@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import './App.css'
 import { useState, useEffect } from "react";
+import type { User } from "../lib/api";
 import { apiService } from "../lib/api";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -11,23 +12,43 @@ import AccountPage from "./pages/AccountPage";
 
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(() => apiService.isAuthenticated());
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const location = useLocation();
 
   useEffect(() => {
-    setLoggedIn(apiService.isAuthenticated());
+    async function loadUser() {
+    if (!apiService.isAuthenticated()) {
+      setUser(null);
+      return;
+    }
+    try {
+      const currentUser = await apiService.me();
+      setUser(currentUser);
+    } catch {
+      setUser(null);
+    }
+  }
+
+    loadUser();
   }, [location]);
+
+  const loggedIn = !!user;
   
   return (
     <>
       <Navbar loggedIn={loggedIn} />
-      <Routes>
-        <Route path="/" element={loggedIn ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/about" element={loggedIn ? <About /> : <Navigate to="/login" />} />
-        <Route path="/login" element={<Login />}/>
-        <Route path="/logout" element={<Logout />}/>
-        <Route path="/account" element={loggedIn ? <AccountPage /> : <Navigate to="/login"/>} />
-      </Routes>
+      <div className="pt-75 md:pt-20">
+        <Routes>
+          <Route path="/" element={loggedIn ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/about" element={<About />}/>
+          <Route path="/login" element={<Login />}/>
+          <Route path="/logout" element={<Logout />}/>
+          <Route path="/profile" element={loggedIn ? <AccountPage /> : <Navigate to="/login"/>} />
+        </Routes>
+      </div>
     </>
   )
 }

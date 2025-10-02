@@ -17,11 +17,12 @@
 
 a {
   font-weight: 500;
-  color: #DEFEF7;
+  color: white;
   text-decoration: inherit;
 }
 a:hover {
   color: #c3f3e9;
+  transition: 100ms;
 }
 
 body {
@@ -40,7 +41,6 @@ h1 {
 nav {
   color: #DEFEF7;
   background-color: #22194E;
-  /* border-bottom: 1px solid #DEFEF7; */
 }
 
 button {

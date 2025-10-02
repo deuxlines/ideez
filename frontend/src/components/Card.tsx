@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 interface CardProps {
   children: React.ReactNode;
   className?: string;
@@ -7,7 +5,7 @@ interface CardProps {
 
 export default function Card({ children, className }: CardProps) {
     return (
-        <div className={`infocard shadow-2xl p-8 w-full mb-4 h-125 min-w-150 opacity-75 flex flex-col ${className || ""}`}>
+        <div className={`infocard shadow-2xl p-12 max-h-[550px] max-w-[650px] flex flex-col gap-8 ${className || ""}`}>
             {children}
         </div>
     )
