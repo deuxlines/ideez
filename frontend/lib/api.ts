@@ -5,11 +5,15 @@ export type VideoType = {
   video_id: string;    
   user_id: string;     
   created_at: string;  
-};
+}
 
 export type VideoCreate = {
   video_id: string;
-};
+}
+
+export type VideoDelete = {
+  id: string;
+}
 
 export interface User {
   email: string;
@@ -17,35 +21,92 @@ export interface User {
   picture: string;
 }
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
 class ApiService {
   async handleGoogleCredentialResponse(response: any): Promise<void> {
-    try {
-      const idToken = response.credential;
-      const res = await fetch(`${API_BASE_URL}/auth/google`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: idToken }),
-        credentials: "include",
-      });
-      if (!res.ok) {
-        throw new Error("Failed to authenticate with backend");
-      }
-      const data = await res.json();
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-        window.location.href = "/";
-      } else {
-        throw new Error("Failed to sign in");
-      }
-    } catch (error) {
-      console.error("Google login error:", error);
+    const idToken = response.credential;
+    const res = await fetch(`${API_BASE_URL}/auth/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: idToken }),
+      credentials: "include",
+    });
+    if (!res) {
+      throw new Error("Failed to authenticate with backend");
+    }
+    if (!res.ok) {
+      throw new Error("Failed to authenticate with backend");
+    }
+    const data = await res.json();
+    if (data.user) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      console.log(localStorage.getItem('user'));
+      window.location.href = "/";
+    } else {
+      throw new Error("Failed to sign in");
+    }
+  }
+
+  async login(request: LoginRequest): Promise<void> {
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request)
+    });
+
+    if (!res.ok) throw new Error(res.statusText);
+
+    const data = await res.json();
+    if (data.user) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      window.location.href = "/";
+    } else {
+      throw new Error("Failed to sign in");
+    }
+  }
+
+  async register(request: RegisterRequest): Promise<void> {
+    const res = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request)
+    });
+
+    const data = await res.json();
+    if (data.user) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...data.user,
+          picture: "/avatar.jpg",
+        })
+      );
+      window.location.href = "/";
+    } else {
+      throw new Error("Failed to register");
     }
   }
 
   isAuthenticated(): boolean {
     const user = localStorage.getItem("user");
     return !!user;
-}
+  }
 
   async logout(): Promise<void> {
     await fetch(`${API_BASE_URL}/auth/logout`, {
@@ -53,6 +114,29 @@ class ApiService {
       credentials: "include",
     });
     localStorage.removeItem('user');
+    window.location.href = "/";
+  }
+
+  async addVideo(request: VideoCreate): Promise<void> {
+    const res = await fetch(`${API_BASE_URL}/videos/`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request)
+    });
+
+    if (!res.ok) throw new Error(res.statusText);
+  }
+
+  async deleteVideo(request: VideoDelete): Promise<void> {
+    const res = await fetch(`${API_BASE_URL}/videos/${request.id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!res.ok) throw new Error("Failed to delete video: " + await res.text());
   }
 
   async fetchRandomVideo(): Promise<VideoType | null> {
