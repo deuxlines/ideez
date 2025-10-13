@@ -16,7 +16,7 @@ export default function Navbar({ loggedIn }: {loggedIn: boolean}) {
         { href: "/chat", label: "Chat" },
         { href: "/about", label: "About" },
         { href: "/contact", label: "Contact" },
-        { href: "/login", label: "Sign in" },
+        { href: "/sign-in", label: "Sign in" },
       ];
 
   const storedUser = localStorage.getItem("user");
@@ -33,8 +33,8 @@ export default function Navbar({ loggedIn }: {loggedIn: boolean}) {
   }, [userPhoto]);
 
   return (
-    <nav className="shadow-2xl fixed top-0 left-0 w-full z-50 max-h-75 md:max-h-20  mx-auto flex items-center"> 
-      <div className='max-w-[1280[px]] p-2 mx-auto flex justify-center gap-20 items-center'>
+    <nav className="shadow-2xl fixed top-0 left-0 w-full z-50 mx-auto flex items-center"> 
+      <div className='max-h-75 md:max-h-20 max-w-[1280[px]] p-2 mx-auto flex justify-center gap-20 items-center'>
         <div className="text-2xl font-semibold ">
           <Link to={"/"} className="transition flex items-center logo-name">
             <img src="/vite.svg" alt="Logo" className="logo" />
@@ -55,7 +55,7 @@ export default function Navbar({ loggedIn }: {loggedIn: boolean}) {
           {loggedIn &&  (
             <Link to="/profile">
               <img
-                src={userPhoto}
+                src={userPhoto || "avatar.jpg"}
                 alt={userName || "My Account"}
                 className="w-10 h-10 rounded-full border-1 border-gray-300 link block object-cover"
               />

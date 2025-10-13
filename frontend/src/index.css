@@ -44,18 +44,18 @@ nav {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #22194E;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.5s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #989cf3;
 }
 button:focus,
 button:focus-visible {
@@ -74,7 +74,7 @@ button:focus-visible {
     color: #22194E;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #DEFEF7;
   }
   nav {
     color: #22194E;

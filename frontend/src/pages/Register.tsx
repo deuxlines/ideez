@@ -3,28 +3,30 @@ import toast from "react-hot-toast";
 import { LogIn } from "lucide-react";
 
 import { apiService } from "../../lib/api";
-import type { LoginRequest } from "../../lib/api";
+import type { RegisterRequest } from "../../lib/api";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
 
 
-export default function Login() {
+export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
 
-        const req: LoginRequest = { email: email, password: password }
+        const req: RegisterRequest = { name: name, email: email, password: password }
 
         try {
-            await apiService.login(req);
+            await apiService.register(req);
             setEmail("");
             setPassword("");
+            setName("");
         } catch (err) {
-            toast.error("Failed to login. Try again.");
+            toast.error("Failed to register. Try again.");
         } finally {
             setLoading(false);
         }
@@ -33,11 +35,26 @@ export default function Login() {
     return (
         <Card>
             <div className="h-[400px] flex flex-col justify-between">
-                <h1 className="font-bold mb-4 self-start">Login</h1>
+                <h1 className="font-bold mb-4 self-start">Register</h1>
                 <form
                     onSubmit={handleSubmit}
                     className="flex flex-col items-center gap-4"
                 >
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Name"
+                        className="
+                            w-full px-4 py-2 rounded-lg
+                            border border-[#1b1b3a]/30 dark:border-[#1b1b3a]/20
+                            bg-[#DEFEF7]
+                            text-black
+                            placeholder:text-gray-500
+                            focus:border-[#7b5cf0] focus:ring-2 focus:ring-[#7b5cf0]/30
+                            outline-none transition
+                        "
+                    />
                     <input
                         type="text"
                         value={email}
@@ -45,10 +62,9 @@ export default function Login() {
                         placeholder="Email"
                         className="
                             w-full px-4 py-2 rounded-lg
-                            text-black
                             border border-[#1b1b3a]/30 dark:border-[#1b1b3a]/20
                             bg-[#DEFEF7]
-                            text-blac
+                            text-black
                             placeholder:text-gray-500
                             focus:border-[#7b5cf0] focus:ring-2 focus:ring-[#7b5cf0]/30
                             outline-none transition
@@ -61,10 +77,9 @@ export default function Login() {
                         placeholder="Password"
                         className="
                             w-full px-4 py-2 rounded-lg
-                            text-black
                             border border-[#1b1b3a]/30 dark:border-[#1b1b3a]/20
                             bg-[#DEFEF7]
-                            text-blac
+                            text-black
                             placeholder:text-gray-500
                             focus:border-[#7b5cf0] focus:ring-2 focus:ring-[#7b5cf0]/30
                             outline-none transition
@@ -88,20 +103,20 @@ export default function Login() {
                         "
                     >
                         <LogIn size={20} />
-                        {loading ? "Logging in..." : "Login"}
+                        {loading ? "Loading..." : "Register"}
                     </button>
                 </form>
                 <div className="w-full">
-                    <p className="font-bold">Don't have an account? </p>
+                    <p className="font-bold">Already have an account? </p>
                     <Link
-                        to="/register"
+                        to="/login"
                         className="
                             !text-white dark:!text-black
                             font-semibold transition
                             hover:!text-[#7e5bfc]
                         "
                         >
-                        Register
+                        Login
                     </Link>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 import Card from "../components/Card";
 import Video from "../components/Video";
@@ -38,9 +39,12 @@ export default function Home() {
         {error && <p>{error}</p>}
         {loading && <p>Loading...</p>}
       </Card>
-      <Card className="flex-[1]">
-        <h1 className="font-bold text-lg self-start">What Do We Add Here?</h1>
+      <Card className="flex-[1] items-start text-left">
+        <h2 className="font-bold text-2xl self-start">For now let's jsut use it for the link :p</h2>
         <p className="text-xl font-bold self-start">Coming soon...</p>
+        <button className="w-full bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold py-2 rounded-lg shadow-md hover:opacity-90 transition disabled:opacity-50">
+          <Link to={"/videos/add"}>Add a Video</Link>
+        </button>
       </Card>
     </div>
   );
