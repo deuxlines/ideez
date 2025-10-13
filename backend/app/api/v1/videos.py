@@ -40,7 +40,7 @@ async def delete_video(
 ) -> None:
     video: Video | None = db.query(Video).filter(Video.id == video_id, Video.user_id == user_id).first()
     if not video:
-        raise HTTPException(status_code=404, detail="Video not found or no access")
+        raise HTTPException(status_code=400, detail="Video not found or no access")
     db.delete(video)
     db.commit()
     return None
