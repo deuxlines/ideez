@@ -8,7 +8,9 @@ class Settings(BaseSettings):
     database_url: str = ""
     database_url_alembic: str = ""
     database_echo: bool = False
+
     secret_key: str = ""
+    pepper: str = ""
     client_secret: str = ""
     client_id: str = ""
     frontend_url: str = ""
