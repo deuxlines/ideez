@@ -1,8 +1,13 @@
 import uuid
 from datetime import datetime
+from typing import Annotated
 
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 from pydantic import EmailStr
+
+
+PasswordStr = Annotated[str, constr(strip_whitespace=True, min_length=8)]
+NameStr = Annotated[str, constr(strip_whitespace=True, min_length=1)]
 
 
 class UserBase(BaseModel):
@@ -28,3 +33,11 @@ class UserResponse(UserBase):
 
 class UserUpdate(UserBase):
     pass
+
+
+class UpdateUsernameRequest(BaseModel):
+    name: NameStr
+
+class UpdatePasswordRequest(BaseModel):
+    old_password: str
+    new_password: PasswordStr

@@ -9,7 +9,7 @@ from app.database import get_db
 from app.auth import get_current_user_id
 from app.crud import get_random_video, create_video, get_all_videos as all_videos
 
-video_router: APIRouter = APIRouter(prefix="/videos", tags=["Share your favorite youtube videos"])
+video_router: APIRouter = APIRouter(prefix="/videos")
 
 @video_router.get("/", response_model=VideoRead)
 async def get_video(db: Session = Depends(get_db), user_id: UUID = Depends(get_current_user_id)) -> VideoRead | dict:
