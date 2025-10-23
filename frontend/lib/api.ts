@@ -27,7 +27,6 @@ class ApiService {
   }
 
   async fetchRandomVideo(): Promise<VideoType | null> {
-    console.log("API" + API_BASE_URL);
     const res = await fetch(`${API_BASE_URL}/videos/`, {
       credentials: "include",
     });

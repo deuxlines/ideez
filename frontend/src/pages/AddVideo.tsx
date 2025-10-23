@@ -21,7 +21,6 @@ export default function AddVideo() {
             await apiService.addVideo(video);
             setSuccess(true);
         } catch (err: any) {
-            console.log(err);
             if (err.message === "Conflict") {
                 toast.error("Video has already been added.")
             } else if (err.message === "Unprocessable Content") {

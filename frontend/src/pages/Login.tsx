@@ -21,7 +21,6 @@ export default function Login() {
         const req: LoginRequest = { email: email, password: password }
 
         try {
-            console.log("fuck");
             await login(req);
             setEmail("");
             setPassword("");

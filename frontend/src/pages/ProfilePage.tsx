@@ -24,8 +24,6 @@ export default function ProfilePage() {
   const memberSince = user?.created_at ? dayjs(user.created_at).toDate() : null;
   const userEmail = user?.email;
 
-  console.log(localStorage.getItem("user"));
-
   const fetchAllVideos = async () => {
     setLoading(true);
     setError(null);

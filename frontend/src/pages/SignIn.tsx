@@ -13,7 +13,6 @@ export default function SignIn() {
     script.defer = true;
     document.body.appendChild(script);
 
-    
     script.onload = () => {
       try {
         const g = (window as any).google;
