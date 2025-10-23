@@ -23,6 +23,7 @@ dependencies = [
     "passlib[bcrypt] (>=1.7.4,<2.0.0)",
     "cloudinary (>=1.44.1,<2.0.0)",
     "python-multipart (>=0.0.20,<0.0.21)",
+    "gunicorn (>=23.0.0,<24.0.0)",
 ]
 
 
