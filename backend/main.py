@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 
-from app import video_router, auth_router, me_router, settings, create_app, setup_middleware
+from app import video_router, auth_router, me_router, user_router, settings, create_app, setup_middleware
 
 app: FastAPI = create_app(
     title = settings.app_name,
@@ -10,7 +10,8 @@ app: FastAPI = create_app(
     routers = [
         auth_router,
         video_router,
-        me_router
+        me_router,
+        user_router,
     ]
 )
 

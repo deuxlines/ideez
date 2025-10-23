@@ -31,7 +31,7 @@ async def google_auth(response: Response, data: GoogleToken, db: Session = Depen
 
         set_auth_cookie(response, token)
 
-        return {"user": {"email": user.email, "name": user.name, "picture": user.picture_url}}
+        return {"user": {"email": user.email, "name": user.name, "picture": user.picture_url, "created_at": user.created_at,},}
     
     except ValueError as e:
         raise HTTPException(status_code=400, detail="Invalid Google token")
@@ -39,13 +39,13 @@ async def google_auth(response: Response, data: GoogleToken, db: Session = Depen
 @auth_router.post("/login")
 async def login(response: Response, req: LoginRequest, db: Session = Depends(get_db)):
     user: User | None = get_user_by_email(db, req.email)
-    if not user or not verify_password(req.password, user.hashed_password):
+    if not user or not verify_password(req.password.strip(), user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = create_access_token(data={"sub": str(user.id)})
     set_auth_cookie(response, token)
 
-    return {"user": {"email": user.email, "name": user.name,}}
+    return {"user": {"email": user.email, "name": user.name, "created_at": user.created_at,}}
 
 @auth_router.post("/register")
 async def register(response: Response, req: RegisterRequest, db: Session = Depends(get_db)):
@@ -53,19 +53,20 @@ async def register(response: Response, req: RegisterRequest, db: Session = Depen
     if user:
         raise HTTPException(status_code=400, detail="User already exists") #temporary solution until I figure out how to add email verification :(
 
-    user_info = req.model_dump()
-    print(user_info)
+    if req.name.strip() == "" or len(req.name.strip()) < 2:
+        raise HTTPException(status_code=400, detail="Name required")
+    if req.password.strip() == "":
+        raise HTTPException(status_code=400, detail="Password Required")
+    if req.email.strip() == "":
+        raise HTTPException(status_code=400, detail="Email Required")
+    if len(req.name.strip()) > 14:
+        raise HTTPException(status_code=400, detail="The name is too long")
 
-    user = create_password_user(
-        db=db,
-        user_info=user_info
-    )
-
+    user = create_password_user(db, req)
     token = create_access_token(data={"sub": str(user.id)})
-
     set_auth_cookie(response, token)
 
-    return {"user": {"email": user.email, "name": user.name}}
+    return {"user": {"email": user.email, "name": user.name, "created_at": user.created_at,}}
 
 
 @auth_router.post("/logout")

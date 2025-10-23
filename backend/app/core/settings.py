@@ -8,8 +8,12 @@ class Settings(BaseSettings):
     database_url: str = ""
     database_url_alembic: str = ""
     database_echo: bool = False
+    cloudinary_cloud_name: str = ""
+    cloudinary_api_key: str = ""
+    cloudinary_api_secret: str = ""
 
     secret_key: str = ""
+
     pepper: str = ""
     client_secret: str = ""
     client_id: str = ""

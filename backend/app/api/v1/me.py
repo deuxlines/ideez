@@ -27,6 +27,7 @@ async def me(
         "user": {
             "email": user.email, 
             "name": user.name, 
-            "picture": user.picture_url
+            "picture": user.picture_url,
+            "created_at": user.created_at,
         }
     }

@@ -15,12 +15,6 @@ class UserBase(BaseModel):
     avatar_url: str | None = None
     
 
-class UserCreate(UserBase):
-    email: EmailStr
-    google_id: str | None = None
-    microsoft_id: str | None = None
-
-
 class UserResponse(UserBase):
     id: uuid.UUID
     email: EmailStr
@@ -31,12 +25,9 @@ class UserResponse(UserBase):
         from_attributes = True
 
 
-class UserUpdate(UserBase):
-    pass
-
-
 class UpdateUsernameRequest(BaseModel):
-    name: NameStr
+    new_name: NameStr
+
 
 class UpdatePasswordRequest(BaseModel):
     old_password: str

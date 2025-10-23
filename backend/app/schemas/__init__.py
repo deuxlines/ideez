@@ -1,11 +1,11 @@
-from .user_schemas import UserCreate, UserResponse, UserUpdate
+from .user_schemas import UserResponse, UpdateUsernameRequest, UpdatePasswordRequest
 from .video_schemas import VideoCreate, VideoRead
 from .auth_schemas import GoogleToken, LoginRequest, RegisterRequest
 
 __all__ = [
-    "UserCreate", 
+    "UpdatePasswordRequest", 
     "UserResponse", 
-    "UserUpdate", 
+    "UpdateUsernameRequest", 
     "VideoRead", 
     "VideoCreate", 
     "GoogleToken", 
