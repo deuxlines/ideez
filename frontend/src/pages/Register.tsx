@@ -1,14 +1,15 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { LogIn } from "lucide-react";
+import { ArrowLeft, LogIn } from "lucide-react";
 
 import { apiService } from "../../lib/api";
-import type { RegisterRequest } from "../../lib/api";
+import type { RegisterRequest } from "../../lib/types";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
-
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function Register() {
+    const { register } = useAuthStore();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -21,12 +22,17 @@ export default function Register() {
         const req: RegisterRequest = { name: name, email: email, password: password }
 
         try {
-            await apiService.register(req);
+            await register(req);
             setEmail("");
             setPassword("");
             setName("");
-        } catch (err) {
-            toast.error("Failed to register. Try again.");
+            window.location.href = "/";
+        } catch (err: any) {
+            if (err.message === 'Bad Request') {
+                toast.error("All fields are required");
+            } else if (err.message === 'Unprocessable Content') {
+                toast.error("Check the fields and try again.")
+            } else toast.error("Failed to register. Try again.");
         } finally {
             setLoading(false);
         }
@@ -35,6 +41,12 @@ export default function Register() {
     return (
         <Card>
             <div className="h-[400px] flex flex-col justify-between">
+                <Link
+                    to="/sign-in"
+                    className="text-[#7e5bfc] hover:opacity-80"
+                >
+                    <ArrowLeft size={30} color="#7e5bfc"/>
+                </Link>
                 <h1 className="font-bold mb-4 self-start">Register</h1>
                 <form
                     onSubmit={handleSubmit}

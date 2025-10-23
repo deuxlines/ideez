@@ -3,7 +3,9 @@ import toast from 'react-hot-toast';
 
 import Card from "../components/Card";
 import { apiService } from '../../lib/api';
-import type { VideoCreate } from '../../lib/api';
+import type { VideoCreate } from '../../lib/types';
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function AddVideo() {
     const [link, setLink] = useState('');
@@ -18,13 +20,13 @@ export default function AddVideo() {
         try {
             await apiService.addVideo(video);
             setSuccess(true);
-        } catch (err) {
+        } catch (err: any) {
             console.log(err);
-            if (err == "Error: Conflict") {
+            if (err.message === "Conflict") {
                 toast.error("Video has already been added.")
-            } else {
-                toast.error("Failed to add video. Try again.");
-            }
+            } else if (err.message === "Unprocessable Content") {
+                toast.error("Try another link");
+            } else toast.error("Failed to add video. Try again.");
             setSuccess(false);
         } finally {
             setLoading(false);
@@ -33,7 +35,13 @@ export default function AddVideo() {
     };
 
     return (
-            <Card className="justify-between h-[400px] bg-transparent p-2 rounded-2xl shadow-xl w-[400px] text-center">
+            <Card className="justify-between bg-transparent p-2 rounded-2xl shadow-xl w-[400px] text-center">
+                <Link
+                    to="/"
+                    className="text-[#7e5bfc] hover:opacity-80"
+                >
+                    <ArrowLeft size={30} color="#7e5bfc"/>
+                </Link>
                 <h1 className="text-xl font-semibold mb-4">
                     Add a New Video
                 </h1>

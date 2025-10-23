@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useAuthStore } from '../store/useAuthStore';
 
+export default function Navbar() {
+  const { user } = useAuthStore();
 
-export default function Navbar({ loggedIn }: {loggedIn: boolean}) {
+  const loggedIn = !!user;
+
   const links = loggedIn
     ? [
         { href: "/", label: "Home" },
@@ -19,22 +22,9 @@ export default function Navbar({ loggedIn }: {loggedIn: boolean}) {
         { href: "/sign-in", label: "Sign in" },
       ];
 
-  const storedUser = localStorage.getItem("user");
-  const userData = storedUser ? JSON.parse(storedUser) : null;
-
-  const userName = userData?.name
-  const userPhoto = userData?.picture
-  
-  useEffect(() => {
-    if (userPhoto) {
-      const img = new Image();
-      img.src = userPhoto;
-    }
-  }, [userPhoto]);
-
   return (
     <nav className="shadow-2xl fixed top-0 left-0 w-full z-50 mx-auto flex items-center"> 
-      <div className='max-h-75 md:max-h-20 max-w-[1280[px]] p-2 mx-auto flex justify-center gap-20 items-center'>
+      <div className='max-h-75 md:max-h-20 max-w-[1280px] p-2 mx-auto flex justify-center gap-20 items-center'>
         <div className="text-2xl font-semibold ">
           <Link to={"/"} className="transition flex items-center logo-name">
             <img src="/vite.svg" alt="Logo" className="logo" />
@@ -50,20 +40,18 @@ export default function Navbar({ loggedIn }: {loggedIn: boolean}) {
             >
               {label}
             </Link>
-            
           ))}
-          {loggedIn &&  (
+          {loggedIn && (
             <Link to="/profile">
               <img
-                src={userPhoto || "avatar.jpg"}
-                alt={userName || "My Account"}
+                src={user?.picture || "/avatar.jpg"}
+                alt={user?.name || "My Account"}
                 className="w-10 h-10 rounded-full border-1 border-gray-300 link block object-cover"
               />
             </Link>
           )}
         </div>
       </div>
-      
     </nav>
   );
 }

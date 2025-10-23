@@ -47,10 +47,8 @@ button {
   border-radius: 12px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #22194E;
   cursor: pointer;
   transition: border-color 0.5s;
 }

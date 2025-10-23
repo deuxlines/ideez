@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { apiService } from "../../lib/api";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function SignIn() {
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function SignIn() {
           g.accounts.id.initialize({
             client_id: clientId,
             callback: (response: any) =>
-              apiService.handleGoogleCredentialResponse(response),
+              useAuthStore.getState().handleGoogleCredentialResponse(response),
           });
 
           g.accounts.id.renderButton(

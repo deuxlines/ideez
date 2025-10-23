@@ -1,14 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { apiService } from "../../lib/api";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function Logout() {
+  const { logout } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    apiService.logout();
-    navigate("/login");
-  }, []);
+  
+      logout();
+      navigate("/login");
+  
+  }, [logout, navigate]);
 
   return null;
 }

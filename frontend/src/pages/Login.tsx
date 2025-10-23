@@ -1,14 +1,15 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { LogIn } from "lucide-react";
+import { LogIn, ArrowLeft } from "lucide-react";
 
-import { apiService } from "../../lib/api";
-import type { LoginRequest } from "../../lib/api";
+import type { LoginRequest } from "../../lib/types";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
+import { useAuthStore } from "../store/useAuthStore";
 
 
 export default function Login() {
+    const { login } = useAuthStore();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,11 +21,15 @@ export default function Login() {
         const req: LoginRequest = { email: email, password: password }
 
         try {
-            await apiService.login(req);
+            console.log("fuck");
+            await login(req);
             setEmail("");
             setPassword("");
-        } catch (err) {
-            toast.error("Failed to login. Try again.");
+            window.location.href = "/";
+        } catch (err: any) {
+            if (err.message === 'Unauthorized') {
+                toast.error("Wrong email or password.");
+            } else toast.error("Invalid email or password");
         } finally {
             setLoading(false);
         }
@@ -33,6 +38,12 @@ export default function Login() {
     return (
         <Card>
             <div className="h-[400px] flex flex-col justify-between">
+                <Link
+                    to="/sign-in"
+                    className="text-[#7e5bfc] hover:opacity-80"
+                >
+                    <ArrowLeft size={30} color="#7e5bfc"/>
+                </Link>
                 <h1 className="font-bold mb-4 self-start">Login</h1>
                 <form
                     onSubmit={handleSubmit}
