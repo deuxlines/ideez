@@ -2,7 +2,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { ArrowLeft, LogIn } from "lucide-react";
 
-import { apiService } from "../../lib/api";
 import type { RegisterRequest } from "../../lib/types";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";

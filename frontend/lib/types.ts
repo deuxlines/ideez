@@ -17,7 +17,7 @@ export interface User {
   email: string;
   name: string;
   picture: string;
-  memberSince: string;
+  created_at?: string;
 }
 
 export interface LoginRequest {
