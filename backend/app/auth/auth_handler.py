@@ -57,7 +57,7 @@ def set_auth_cookie(response, token) -> None:
         key="access_token",
         value=token,
         httponly=True,
-        samesite="lax",
+        samesite="none",
         secure=settings.env_mode != "development",
         path="/"
     )
