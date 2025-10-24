@@ -45,7 +45,7 @@ async def login(response: Response, req: LoginRequest, db: Session = Depends(get
     token = create_access_token(data={"sub": str(user.id)})
     set_auth_cookie(response, token)
 
-    return {"user": {"email": user.email, "name": user.name, "created_at": user.created_at,}}
+    return {"user": {"email": user.email, "name": user.name, "picture": user.picture_url, "created_at": user.created_at,},}
 
 @auth_router.post("/register")
 async def register(response: Response, req: RegisterRequest, db: Session = Depends(get_db)):
