@@ -54,10 +54,11 @@ def verify_password(password: str, hashed: str) -> bool:
 
 def set_auth_cookie(response, token) -> None:
     response.set_cookie(
-    key="access_token",
-    value=token,
-    httponly=True,
-    samesite="none",
-    secure=True,
-    path="/",
-)
+        key="access_token",
+        value=token,
+        httponly=True,
+        samesite="none",
+        secure=True,
+        path="/",
+    )
+    print("Good.")
