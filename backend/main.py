@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-import uvicorn
+from fastapi.staticfiles import StaticFiles
 
 from app import video_router, auth_router, me_router, user_router, settings, create_app, setup_middleware
 
@@ -16,3 +16,5 @@ app: FastAPI = create_app(
 )
 
 setup_middleware(app)
+
+app.mount("/", StaticFiles(directory="dist", html=True), name="frontend")
