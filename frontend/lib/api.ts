@@ -1,6 +1,8 @@
 import type { VideoCreate, VideoDelete, VideoType } from "./types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const API_BASE_URL = "";
 
 
 class ApiService {
