@@ -7,7 +7,7 @@ const API_BASE_URL = "";
 
 class ApiService {
   async addVideo(request: VideoCreate): Promise<void> {
-    const res = await fetch(`${API_BASE_URL}/videos/`, {
+    const res = await fetch(`${API_BASE_URL}/videos`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -29,7 +29,7 @@ class ApiService {
   }
 
   async fetchRandomVideo(): Promise<VideoType | null> {
-    const res = await fetch(`${API_BASE_URL}/videos/`, {
+    const res = await fetch(`${API_BASE_URL}/videos`, {
       credentials: "include",
     });
     if (!res.ok) throw new Error("Failed to fetch video");
@@ -38,7 +38,7 @@ class ApiService {
   }
 
   async fetchAllVideos(): Promise<VideoType[] | null> {
-    const res = await fetch(`${API_BASE_URL}/videos/all/`, {
+    const res = await fetch(`${API_BASE_URL}/videos/all`, {
       credentials: "include",
     });
     if (!res.ok) throw new Error("Failed to fetch video");
