@@ -11,14 +11,14 @@ from app.crud import get_random_video, create_video, get_all_videos as all_video
 
 video_router: APIRouter = APIRouter(prefix="/videos")
 
-@video_router.get("/", response_model=VideoRead)
+@video_router.get("", response_model=VideoRead)
 async def get_video(db: Session = Depends(get_db), user_id: UUID = Depends(get_current_user_id)) -> VideoRead | dict:
     video: Video | None = get_random_video(db)
     if not video:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No videos found")
     return video
 
-@video_router.post("/", response_model=VideoRead)
+@video_router.post("", response_model=VideoRead)
 async def add_video(
     video_data: VideoCreate,
     db: Session = Depends(get_db), 
