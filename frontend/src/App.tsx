@@ -37,7 +37,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="pt-75 md:pt-20">
+      <div className="pt-15 md:pt-10">
         <Routes>
           <Route path="/" element={loggedIn ? <Home /> : <Navigate to="/sign-in" />} />
           <Route path="/about" element={<About />} />

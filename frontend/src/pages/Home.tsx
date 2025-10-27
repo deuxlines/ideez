@@ -31,7 +31,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row gap-10 w-full max-w-[1024px]">
+    <div className="flex flex-col md:flex-row gap-6 md:gap-10 w-full max-w-[1024px] mx-auto">
       <Card className="flex-[3]">
         <h1 className="font-bold text-lg self-start">Our Video Hub</h1>
         <p className="text-xl font-bold self-start">Find ideas here</p>

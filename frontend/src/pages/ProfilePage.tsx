@@ -19,7 +19,7 @@ export default function ProfilePage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [newUserName, setNewUserName] = useState(user?.name || "");
-  
+
   const userAvatar = user?.picture;
   const memberSince = user?.created_at ? dayjs(user.created_at).toDate() : null;
   const userEmail = user?.email;
@@ -43,7 +43,6 @@ export default function ProfilePage() {
 
     try {
       await changeName(newUserName);
-
       toast.success("Username updated!");
       setIsEditing(false);
     } catch (err: any) {
@@ -55,17 +54,17 @@ export default function ProfilePage() {
     }
   };
 
- const handleProfilePicChange = async (e: ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
+  const handleProfilePicChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  try {
-    await updateAvatar(file);
-    toast.success("Profile picture updated!");
-  } catch (err: any) {
-    toast.error(err.message || "Failed to upload picture");
-  }
-};
+    try {
+      await updateAvatar(file);
+      toast.success("Profile picture updated!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to upload picture");
+    }
+  };
 
   const handleDelete = async (id: string) => {
     try {
@@ -81,42 +80,42 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col md:flex-row gap-10 w-full max-w-[1024px]">
-      <Card className="flex-[3] md:w-[650px]">
-        <h1 className="font-bold text-xl self-start">Your videos:</h1>
-        <div className="overflow-y-auto max-h-[80%] rounded-[35px] flex flex-col gap-4 p-4">
-          {loading && <h1 className="font-bold self-start">Loading...</h1>}
-          {error && <h1 className="font-bold self-start">{error}</h1>}
+    <div className="flex flex-col md:flex-row gap-6 md:gap-10 w-full max-w-[1024px] mx-auto">
+      <Card className="flex-1 md:flex-[3] w-full">
+        <h1 className="font-bold text-xl mb-4">Your videos:</h1>
+        <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
+          {loading && <p className="font-bold">Loading...</p>}
+          {error && <p className="font-bold text-red-500">{error}</p>}
           {currentVideos && currentVideos.length > 0 ? (
             currentVideos
               .slice()
               .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
               .map((video) => (
-                <div key={video.id} className="flex flex-col items-center">
+                <div key={video.id} className="flex flex-col items-center gap-2">
                   <Video video_id={video.video_id} />
                   <button
                     onClick={() => handleDelete(video.id)}
-                    className="text-white bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold py-2 rounded-lg shadow-md hover:opacity-90 transition disabled:opacity-50 mt-2"
+                    className="text-white w-full md:w-auto bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold py-2 rounded-lg shadow-md hover:opacity-90 transition disabled:opacity-50"
                   >
                     Delete
                   </button>
                 </div>
               ))
           ) : (
-            <h1>No videos yet.</h1>
+            <p>No videos yet.</p>
           )}
         </div>
       </Card>
 
-      <Card className="flex-[1] p-6 flex flex-col gap-4">
-        <h1 className="font-bold text-xl self-start">Your profile</h1>
+      <Card className="flex-1 w-full flex flex-col gap-4 p-6 md:p-8">
+        <h2 className="font-bold text-xl">Your profile</h2>
 
-        <div className="flex w-full justify-center">
-          <div className="relative w-32 h-32 mb-4">
+        <div className="flex justify-center mb-4">
+          <div className="relative w-24 h-24 md:w-32 md:h-32">
             <img
               src={userAvatar || "/avatar.jpg"}
               alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border-2 border-purple-500"
+              className="w-full h-full rounded-full object-cover border-2 border-purple-500"
             />
             <label
               htmlFor="profilePicUpload"
@@ -134,26 +133,24 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <h3 className="font-bold text-xl self-start">Email: {userEmail ? userEmail : "No email :("}</h3> 
-        
-        <div className="flex items-center gap-2">
+        <p className="font-semibold text-sm md:text-base break-words">
+          Email: {userEmail || "No email :("}
+        </p>
+
+        <div className="flex flex-col gap-2 w-full">
           {isEditing ? (
-            <div className="flex flex-col gap-2 w-full">
+            <>
               <input
                 type="text"
                 value={newUserName}
                 onChange={(e) => setNewUserName(e.target.value)}
-                className="border border-[#9745c3] border-b-4 rounded px-2 py-1 flex-1 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="border border-purple-400 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
-              <div className="flex flex-row gap-2 justify-end w-full">
+              <div className="flex gap-2 justify-end">
                 <button
                   onClick={handleSaveUsername}
-                  disabled={
-                    !newUserName ||
-                    newUserName.trim() === "" ||
-                    newUserName === user?.name
-                  }
-                  className="text-white bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold rounded-lg shadow-md hover:opacity-90 transition disabled:opacity-50"
+                  disabled={!newUserName || newUserName.trim() === "" || newUserName === user?.name}
+                  className="text-white bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold rounded-lg shadow-md py-1 px-4 hover:opacity-90 transition disabled:opacity-50"
                 >
                   Save
                 </button>
@@ -162,30 +159,28 @@ export default function ProfilePage() {
                     setIsEditing(false);
                     setNewUserName(user?.name || "");
                   }}
-                  className="text-white bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold rounded-lg shadow-md hover:opacity-90 transition disabled:opacity-50"
+                  className="text-white bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold rounded-lg shadow-md py-1 px-4 hover:opacity-90 transition disabled:opacity-50"
                 >
                   Cancel
                 </button>
               </div>
-            </div>
+            </>
           ) : (
-            <div className="flex flex-row justify-between w-full items-center">
-              <div className="flex items-center gap-2">
-                <h3 className="font-bold text-xl self-start">{`Username: ${user?.name}`}</h3>
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold p-2 rounded-lg shadow-md hover:opacity-90 transition disabled:opacity-50"
-                >
-                  <Pencil size={10} color="white" />
-                </button>
-              </div>
+            <div className="flex items-center justify-between">
+              <p className="font-bold text-lg break-words">Username: {user?.name}</p>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-gradient-to-r from-[#7e5bfc] to-[#9745c3] font-semibold p-2 rounded-lg shadow-md hover:opacity-90 transition disabled:opacity-50"
+              >
+                <Pencil size={14} color="white" />
+              </button>
             </div>
           )}
         </div>
 
-        <h3 className="font-bold text-xl self-start">
+        <p className="font-semibold text-sm md:text-base">
           Member Since: {memberSince ? memberSince.toLocaleDateString() : "Unknown"}
-        </h3>
+        </p>
       </Card>
     </div>
   );

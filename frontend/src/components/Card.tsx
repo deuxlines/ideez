@@ -4,9 +4,19 @@ interface CardProps {
 }
 
 export default function Card({ children, className }: CardProps) {
-    return (
-        <div className={`infocard shadow-2xl p-12 min-w-[400px] min-h-[400px] max-h-[550px] max-w-[650px] flex flex-col gap-8 ${className || ""}`}>
-            {children}
-        </div>
-    )
+  return (
+    <div className={`
+      infocard
+      shadow-2xl
+      p-6 md:p-8
+      w-full
+      md:max-h-[525px] max-h-[900px]
+      max-w-full md:max-w-[650px]
+      min-h-[auto] md:min-h-[400px]
+      flex flex-col gap-4 md:gap-8
+      ${className || ""}
+    `}>
+      {children}
+    </div>
+  )
 }
